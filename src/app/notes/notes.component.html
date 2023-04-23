@@ -1,0 +1,60 @@
+<div class="container">
+    <form [formGroup]="registerationForm" (ngSubmit)="submitData()">
+       
+        <div class="form-group">
+            <label>User Name :</label>
+            <input [class.is-invalid]="userName?.invalid &&userName?.touched" formControlName="userName" type="text" class="form-control">
+            
+            <div *ngIf="userName?.invalid &&userName?.touched">
+                <small *ngIf="userName?.errors?.['required']" class="text-danger">User Name is required</small>
+                <small *ngIf="userName?.errors?.['minlength']" class="text-danger">User name at least 5 characters</small>
+                <small class="text-danger" *ngIf="userName?.errors?.['forbiddenName']">{{userName?.errors?.['forbiddenName'].value}} is not allowed</small>
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+    <select class="custom-select" (change)="changeProduct($event)" formControlName="ProductName">
+        <option value="">Choose your Product</option>
+        <option *ngFor="let Product of Product" [ngValue]="Product">{{Product}}</option>
+    </select>
+
+   
+    <div class="invalid-feedback" *ngIf="isSubmitted && productName?.errors?.['required']">
+        <sup>*</sup>Please enter your Product name
+    </div>
+</div>
+
+
+
+        <div class="form-group">
+            <label>Comment</label>
+            <input type="text" 
+                   class="form-control"
+                   formControlName="comment"
+                   [class.is-invalid]="comment?.touched &&comment?.invalid">
+             <small class="text-danger" *ngIf="comment?.touched &&comment?.invalid">Comment is required</small>      
+        </div>
+        <button (click)="addAleternativeComments()" class="btn btn-success float-right">Add New Comment</button>
+        <div formArrayName="aleternativeEmails"
+             *ngFor="let comment of aleternativeComments.controls; let i=index">
+             <label>Alternative Comment # {{i+1}}</label>
+             <input type="text" class="form-control" [formControlName]="i">
+             <button (click)="deleteComment(i)" class="btn btn-danger float-right">-</button>
+        </div>
+        <div class="form-check mb-3">
+            <input type="checkbox"
+                   (click)="setCommentValidation()"
+                   formControlName="subscribe"
+                   class="form-check-input">
+             <label class="form-check-label">Show Discount</label>      
+        </div>
+
+        
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br>
+    <button (click)="loadData()" class="btn btn-success">Load Data</button>
+</div>
